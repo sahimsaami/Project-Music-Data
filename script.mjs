@@ -1,11 +1,118 @@
-// This is a placeholder file which shows how you can access functions defined in other files.
-// It can be loaded into index.html.
-// You can delete the contents of the file once you have understood how it works.
-// Note that when running locally, in order to open a web page which uses modules, you must serve the directory over HTTP e.g. with https://www.npmjs.com/package/http-server
-// You can't open the index.html file using a file:// URL.
+import { getUserIDs, getListenEvents } from "./data.mjs";
+import {
+  mostListenedSong,
+  mostListenedArtist,
+  fridayNightSong,
+  mostListenedSongByTime,
+  mostListenedArtistByTime,
+  longestStreak,
+  songsEveryDay,
+  topGenres
+} from "./common.mjs";
 
-import { countUsers } from "./common.mjs";
+const select = document.getElementById("user-select");
+const container = document.getElementById("stats-container");
+const noDataMsg = document.getElementById("no-data");
 
-window.onload = function () {
-  document.querySelector("body").innerText = `There are ${countUsers()} users`;
-};
+/* ---------- populate dropdown ---------- */
+
+getUserIDs().forEach((id) => {
+  const option = document.createElement("option");
+  option.value = id;
+  option.textContent = id;
+  select.appendChild(option);
+});
+
+/* ---------- user selection ---------- */
+
+select.addEventListener("change", (e) => {
+  const userId = e.target.value;
+
+  if (!userId) {
+    container.classList.add("hidden");
+    return;
+  }
+
+  const events = getListenEvents(userId);
+
+  if (!events || events.length === 0) {
+    container.classList.add("hidden");
+    noDataMsg.classList.remove("hidden");
+    return;
+  }
+
+  noDataMsg.classList.add("hidden");
+  container.classList.remove("hidden");
+
+  /* ---------- Question 1 ---------- */
+
+  const topSong = mostListenedSong(events);
+  if (topSong) {
+    document.querySelector("#most-song-count p").innerText =
+      `${topSong.artist} - ${topSong.title}`;
+  }
+
+  /* ---------- Question 2 ---------- */
+
+  const topArtist = mostListenedArtist(events);
+  if (topArtist) {
+    document.querySelector("#most-artist-count p").innerText = topArtist;
+  }
+
+  /* ---------- Question 3 ---------- */
+
+  const fridaySong = fridayNightSong(events);
+  const fridaySection = document.getElementById("friday-song");
+
+  if (fridaySong) {
+    fridaySection.classList.remove("hidden");
+    fridaySection.querySelector("p").innerText =
+      `${fridaySong.artist} - ${fridaySong.title}`;
+  } else {
+    fridaySection.classList.add("hidden");
+  }
+
+  /* ---------- Question 4 ---------- */
+
+  const songByTime = mostListenedSongByTime(events);
+  if (songByTime) {
+    document.querySelector("#most-song-time p").innerText =
+      `${songByTime.artist} - ${songByTime.title}`;
+  }
+
+  const artistByTime = mostListenedArtistByTime(events);
+  if (artistByTime) {
+    document.querySelector("#most-artist-time p").innerText = artistByTime;
+  }
+
+  /* ---------- Question 5 ---------- */
+
+  const streak = longestStreak(events);
+  if (streak) {
+    document.querySelector("#longest-streak p").innerText =
+      `${streak.song.artist} - ${streak.song.title} (length: ${streak.count})`;
+  }
+
+  /* ---------- Question 6 ---------- */
+
+  const everyDay = songsEveryDay(events);
+  const everyDaySection = document.getElementById("every-day-songs");
+
+  if (everyDay.length > 0) {
+    everyDaySection.classList.remove("hidden");
+
+    everyDaySection.querySelector("p").innerText =
+      everyDay.map((s) => `${s.artist} - ${s.title}`).join(", ");
+  } else {
+    everyDaySection.classList.add("hidden");
+  }
+
+  /* ---------- Question 7 ---------- */
+
+  const genres = topGenres(events);
+
+  if (genres.length > 0) {
+    document.querySelector("#top-genres p").innerText =
+      genres.join(", ");
+  }
+});

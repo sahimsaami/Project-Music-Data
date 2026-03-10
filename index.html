@@ -1,8 +1,78 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
   <head>
-    <script type="module" src="script.mjs"></script>
+    <meta charset="UTF-8" />
+    <title>Music Data Analysis</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      .hidden {
+        display: none;
+      }
+
+      section {
+        margin-bottom: 1.5rem;
+      }
+    </style>
   </head>
+
   <body>
+    <header>
+      <h1>Music Listening Insights</h1>
+    </header>
+
+    <main>
+      <section>
+        <label for="user-select">Select a user</label>
+        <select id="user-select">
+          <option value="">-- Choose user --</option>
+        </select>
+      </section>
+
+      <p id="no-data" class="hidden">This user didn't listen to any songs.</p>
+
+      <div id="stats-container" class="hidden">
+        <section id="most-song-count">
+          <h2>Most listened song (count)</h2>
+          <p></p>
+        </section>
+
+        <section id="most-artist-count">
+          <h2>Most listened artist (count)</h2>
+          <p></p>
+        </section>
+
+        <section id="friday-song" class="hidden">
+          <h2>Most listened song on Friday night</h2>
+          <p></p>
+        </section>
+
+        <section id="most-song-time">
+          <h2>Most listened song (time)</h2>
+          <p></p>
+        </section>
+
+        <section id="most-artist-time">
+          <h2>Most listened artist (time)</h2>
+          <p></p>
+        </section>
+
+        <section id="longest-streak">
+          <h2>Longest streak song</h2>
+          <p></p>
+        </section>
+
+        <section id="every-day-songs" class="hidden">
+          <h2>Songs listened to every day</h2>
+          <p></p>
+        </section>
+
+        <section id="top-genres">
+          <h2>Top genres</h2>
+          <p></p>
+        </section>
+      </div>
+    </main>
+
+    <script type="module" src="./script.mjs"></script>
   </body>
 </html>
