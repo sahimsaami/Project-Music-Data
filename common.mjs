@@ -39,32 +39,13 @@ export function countUsers() {
 /*  Most listened song (count)  */
 
 export function mostListenedSong(events) {
-  if (!events || events.length === 0) {
-    return null;
-  }
+  events = ensureArray(events);
+  if (events.length === 0) return null;
 
-  const counts = {};
+  const counts = groupBy((e) => e.song_id, events);
+  const songId = topKey(counts);
 
-  for (const event of events) {
-    const id = event.song_id;
-
-    if (!counts[id]) {
-      counts[id] = 0;
-    }
-    counts[id]++;
-  }
-  let topId = null;
-  let max = 0;
-  for (const id in counts) {
-    if (counts[id] > max) {
-      max = counts[id];
-      topId = id;
-    }
-  }
-  if (!topId) {
-    return null;
-  }
-  return getSong(topId);
+  return getSong(songId);
 }
 
 /*   Most listened artist (count)  */
