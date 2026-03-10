@@ -7,14 +7,14 @@ import {
   mostListenedArtistByTime,
   longestStreak,
   songsEveryDay,
-  topGenres
+  topGenres,
 } from "./common.mjs";
 
 const select = document.getElementById("user-select");
 const container = document.getElementById("stats-container");
 const noDataMsg = document.getElementById("no-data");
 
-/* ---------- populate dropdown ---------- */
+/*  populate dropdown  */
 
 getUserIDs().forEach((id) => {
   const option = document.createElement("option");
@@ -22,8 +22,6 @@ getUserIDs().forEach((id) => {
   option.textContent = id;
   select.appendChild(option);
 });
-
-/* ---------- user selection ---------- */
 
 select.addEventListener("change", (e) => {
   const userId = e.target.value;
@@ -34,7 +32,6 @@ select.addEventListener("change", (e) => {
   }
 
   const events = getListenEvents(userId);
-
   if (!events || events.length === 0) {
     container.classList.add("hidden");
     noDataMsg.classList.remove("hidden");
@@ -43,23 +40,16 @@ select.addEventListener("change", (e) => {
 
   noDataMsg.classList.add("hidden");
   container.classList.remove("hidden");
-
-  /* ---------- Question 1 ---------- */
-
   const topSong = mostListenedSong(events);
   if (topSong) {
     document.querySelector("#most-song-count p").innerText =
       `${topSong.artist} - ${topSong.title}`;
   }
 
-  /* ---------- Question 2 ---------- */
-
   const topArtist = mostListenedArtist(events);
   if (topArtist) {
     document.querySelector("#most-artist-count p").innerText = topArtist;
   }
-
-  /* ---------- Question 3 ---------- */
 
   const fridaySong = fridayNightSong(events);
   const fridaySection = document.getElementById("friday-song");
@@ -72,8 +62,6 @@ select.addEventListener("change", (e) => {
     fridaySection.classList.add("hidden");
   }
 
-  /* ---------- Question 4 ---------- */
-
   const songByTime = mostListenedSongByTime(events);
   if (songByTime) {
     document.querySelector("#most-song-time p").innerText =
@@ -85,15 +73,11 @@ select.addEventListener("change", (e) => {
     document.querySelector("#most-artist-time p").innerText = artistByTime;
   }
 
-  /* ---------- Question 5 ---------- */
-
   const streak = longestStreak(events);
   if (streak) {
     document.querySelector("#longest-streak p").innerText =
       `${streak.song.artist} - ${streak.song.title} (length: ${streak.count})`;
   }
-
-  /* ---------- Question 6 ---------- */
 
   const everyDay = songsEveryDay(events);
   const everyDaySection = document.getElementById("every-day-songs");
@@ -101,18 +85,16 @@ select.addEventListener("change", (e) => {
   if (everyDay.length > 0) {
     everyDaySection.classList.remove("hidden");
 
-    everyDaySection.querySelector("p").innerText =
-      everyDay.map((s) => `${s.artist} - ${s.title}`).join(", ");
+    everyDaySection.querySelector("p").innerText = everyDay
+      .map((s) => `${s.artist} - ${s.title}`)
+      .join(", ");
   } else {
     everyDaySection.classList.add("hidden");
   }
 
-  /* ---------- Question 7 ---------- */
-
   const genres = topGenres(events);
 
   if (genres.length > 0) {
-    document.querySelector("#top-genres p").innerText =
-      genres.join(", ");
+    document.querySelector("#top-genres p").innerText = genres.join(", ");
   }
 });

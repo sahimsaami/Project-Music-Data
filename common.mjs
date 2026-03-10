@@ -1,7 +1,6 @@
 import { getUserIDs, getSong } from "./data.mjs";
 
-/*  Utility  */
-
+// Utility
 function ensureArray(events) {
   if (!events) return [];
   return Array.isArray(events) ? events : Object.values(events);
@@ -30,14 +29,12 @@ function topKey(map) {
   return entry ? entry[0] : null;
 }
 
-/*  Required for unit test  */
-
+// Required for unit test
 export function countUsers() {
   return getUserIDs().length;
 }
 
-/*  Most listened song (count)  */
-
+// Most listened song (count)
 export function mostListenedSong(events) {
   events = ensureArray(events);
   if (events.length === 0) return null;
@@ -48,8 +45,7 @@ export function mostListenedSong(events) {
   return getSong(songId);
 }
 
-/*   Most listened artist (count)  */
-
+// Most listened artist (count)
 export function mostListenedArtist(events) {
   events = ensureArray(events);
   if (events.length === 0) return null;
@@ -67,7 +63,7 @@ export function mostListenedArtist(events) {
   return topKey(artistCounts);
 }
 
-/*  Friday night listens  */
+// Friday night listens
 export function fridayNightSong(events) {
   events = ensureArray(events);
 
@@ -86,7 +82,7 @@ export function fridayNightSong(events) {
   return getSong(songId);
 }
 
-/*  Most listened song (time)  */
+// Most listened song (time)
 export function mostListenedSongByTime(events) {
   events = ensureArray(events);
   if (events.length === 0) return null;
